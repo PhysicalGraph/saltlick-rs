@@ -286,7 +286,7 @@ mod tests {
     use super::{PublicKey, SecretKey, PUBLICKEYBYTES, SECRETKEYBYTES};
     use crate::testutils::random_bytes;
     use std::{fs::File, io::Write};
-    use tempdir::TempDir;
+    use tempfile::TempDir;
 
     const SECRET_KEY: &str = "-----BEGIN PRIVATE KEY-----
     MC4CAQAwBQYDK2VuBCIEIPi/trPNMJy8wbQtVl4oVR60m+7dFksCMU1CJHxQGtxo
@@ -356,7 +356,7 @@ mod tests {
 
     #[test]
     fn public_key_file_round_trip_test() {
-        let tmp_dir = TempDir::new("public_key").unwrap();
+        let tmp_dir = TempDir::with_prefix("public_key").unwrap();
         for seed in 1..100 {
             let file_path = tmp_dir.path().join(format!("{}.pem", seed));
             let bytes = random_bytes(seed, PUBLICKEYBYTES);
@@ -369,7 +369,7 @@ mod tests {
 
     #[test]
     fn secret_key_file_round_trip_test() {
-        let tmp_dir = TempDir::new("secret_key").unwrap();
+        let tmp_dir = TempDir::with_prefix("secret_key").unwrap();
         for seed in 1..100 {
             let file_path = tmp_dir.path().join(format!("{}.pem", seed));
             let bytes = random_bytes(seed, SECRETKEYBYTES);
@@ -382,7 +382,7 @@ mod tests {
 
     #[test]
     fn bad_public_key_file_test() {
-        let tmp_dir = TempDir::new("public_key").unwrap();
+        let tmp_dir = TempDir::with_prefix("public_key").unwrap();
         let file_path = tmp_dir.path().join("too_many.pem");
         let bytes = random_bytes(0, PUBLICKEYBYTES + 1);
         File::create(&file_path)
@@ -401,7 +401,7 @@ mod tests {
 
     #[test]
     fn bad_secret_key_file_test() {
-        let tmp_dir = TempDir::new("secret_key").unwrap();
+        let tmp_dir = TempDir::with_prefix("secret_key").unwrap();
         let file_path = tmp_dir.path().join("too_many.pem");
         let bytes = random_bytes(0, SECRETKEYBYTES + 1);
         File::create(&file_path)
